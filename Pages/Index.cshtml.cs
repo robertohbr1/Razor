@@ -18,10 +18,10 @@ namespace RazorDataPresentation.Pages
 
             TableColumns = new List<TableColumn>
             {
-                new TableColumn { Column = nameof(Empresa.IE), Caption = "IE", Alignment = "center", TipoInfo = TipoInfo.IE },
+                new TableColumn { Column = nameof(Empresa.IE), Caption = "IE", Alignment = "center", TipoInfo = TipoInfo.IE, Link = "ShowInfo", LinkFields = new List<string> { nameof(Empresa.IE), nameof(Empresa.Nome) } },
                 new TableColumn { Column = nameof(Empresa.Codigo), Caption = "Código", Alignment = "right", TipoInfo = TipoInfo.Numero },
                 new TableColumn { Column = nameof(Empresa.Nome), Caption = "Nome", Alignment = "left", TipoInfo = TipoInfo.Texto },
-                new TableColumn { Column = nameof(Empresa.CNPJ), Caption = "CNPJ", Alignment = "center", TipoInfo = TipoInfo.CNPJ },
+                new TableColumn { Column = nameof(Empresa.CNPJ), Caption = "CNPJ", Alignment = "center", TipoInfo = TipoInfo.CNPJ, Link = "ShowCNPJ", LinkFields = new List<string> { nameof(Empresa.CNPJ) } },
                 new TableColumn { Column = nameof(Empresa.ValorTotal), Caption = "Valor Total", Alignment = "right", TipoInfo = TipoInfo.Moeda },
                 new TableColumn { Column = nameof(Empresa.ValorICMS), Caption = "Valor ICMS", Alignment = "right", TipoInfo = TipoInfo.Moeda },
                 new TableColumn { Column = nameof(Empresa.ValorST), Caption = "Valor ST", Alignment = "right", TipoInfo = TipoInfo.Moeda },
@@ -97,6 +97,21 @@ namespace RazorDataPresentation.Pages
             };
         }
 
+        public string GetLinkData(Empresa empresa, List<string>? linkFields)
+        {
+            if (linkFields == null || linkFields.Count == 0)
+                return string.Empty;
+
+            var values = new List<string>();
+            foreach (var field in linkFields)
+            {
+                var value = empresa.GetType().GetProperty(field)?.GetValue(empresa);
+                values.Add(value?.ToString() ?? string.Empty);
+            }
+
+            return string.Join("|", values);
+        }
+
         private static string FormatCnpj(object value)
         {
             var digits = new string((value.ToString() ?? string.Empty).Where(char.IsDigit).ToArray());
@@ -153,6 +168,8 @@ namespace RazorDataPresentation.Pages
         public string Alignment { get; set; } = "left";
         public TipoInfo TipoInfo { get; set; } = TipoInfo.Texto;
         public bool Visible { get; set; } = true;
+        public string? Link { get; set; } // Padrão: tipo de ação a executar
+        public List<string>? LinkFields { get; set; } // Campos da linha a usar no link
     }
 
     public enum TipoInfo

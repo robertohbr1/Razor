@@ -31,7 +31,21 @@
                     @foreach (var column in Model.TableColumns.Where(c => c.Visible))
                     {
                         var value = item.GetType().GetProperty(column.Column)?.GetValue(item);
-                        <td data-col="@column.Column" style="text-align:@column.Alignment">@Model.FormatValue(value, column.TipoInfo)</td>
+                        var formattedValue = Model.FormatValue(value, column.TipoInfo);
+                        
+                        <td data-col="@column.Column" style="text-align:@column.Alignment">
+                            @if (!string.IsNullOrEmpty(column.Link))
+                            {
+                                var linkData = Model.GetLinkData(item, column.LinkFields);
+                                <a href="#" onclick="handleLinkAction('@column.Link', '@linkData'); return false;" style="cursor: pointer; color: blue; text-decoration: underline;">
+                                    @formattedValue
+                                </a>
+                            }
+                            else
+                            {
+                                @formattedValue
+                            }
+                        </td>
                     }
                 </tr>
             }
@@ -41,6 +55,21 @@
         function changeOrder(value) {
             document.getElementById('orderInput').value = value;
             document.getElementById('orderForm').submit();
+        }
+
+        function handleLinkAction(action, data) {
+            const parts = data.split('|');
+            
+            if (action === 'ShowInfo') {
+                const [ie, nome] = parts;
+                alert(`IE: ${ie}\nNome: ${nome}`);
+            }
+            else if (action === 'ShowCNPJ') {
+                const cnpj = parts[0];
+                alert(`CNPJ: ${cnpj}`);
+            }
+            // Adicione outros tipos de ações aqui conforme necessário
+            // else if (action === 'OutraAcao') { ... }
         }
     </script>
 </body>
