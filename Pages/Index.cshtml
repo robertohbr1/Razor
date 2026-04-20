@@ -1,0 +1,47 @@
+@page
+@model RazorDataPresentation.Pages.IndexModel
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dados da Tabela</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <h1>Apresentação dos Dados</h1>
+    <form method="get" id="orderForm">
+        <input type="hidden" name="order" id="orderInput" value="@Model.SelectedOrder" />
+        <label><input type="radio" name="orderRadio" value="IE" @(Model.SelectedOrder == "IE" ? "checked" : "") onchange="changeOrder(this.value)"> IE</label>
+        <label><input type="radio" name="orderRadio" value="CNPJ" @(Model.SelectedOrder == "CNPJ" ? "checked" : "") onchange="changeOrder(this.value)"> CNPJ</label>
+    </form>
+    <table id="data-table">
+        <thead>
+            <tr>
+                @foreach (var column in Model.TableColumns.Where(c => c.Visible))
+                {
+                    <th data-col="@column.Column" style="text-align:@column.Alignment">@column.Caption</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Empresas)
+            {
+                <tr>
+                    @foreach (var column in Model.TableColumns.Where(c => c.Visible))
+                    {
+                        var value = item.GetType().GetProperty(column.Column)?.GetValue(item);
+                        <td data-col="@column.Column" style="text-align:@column.Alignment">@Model.FormatValue(value, column.TipoInfo)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        function changeOrder(value) {
+            document.getElementById('orderInput').value = value;
+            document.getElementById('orderForm').submit();
+        }
+    </script>
+</body>
+</html>
