@@ -20,7 +20,7 @@
             <tr>
                 @foreach (var column in Model.TableColumns.Where(c => c.ativo))
                 {
-                    <th data-col="@column.nome" style="text-align:@Model.GetAlignmentCss(column.alinhamento)">@column.texto</th>
+                    <th data-col="@column.nome" style="text-align:@Model.GetAlignmentCss(column.alinhamento)" title="@column.textoToolTip">@column.texto</th>
                 }
             </tr>
         </thead>

@@ -36,18 +36,18 @@ namespace RazorDataPresentation.Pages
 
             TableColumns = new List<ColunaCustomizada>
             {
-                CreateColumn(nome: "IE", campo: "IE", texto: "IE", alinhamento: 1, tipo: TipoDadoEnum.IE, Link: "ShowInfo", LinkFields: new List<string> { "IE", "Nome" }),
-                CreateColumn(nome: "Codigo", campo: "Codigo", texto: "Código", alinhamento: 2, tipo: TipoDadoEnum.Numero),
-                CreateColumn(nome: "Nome", campo: "Nome", texto: "Nome", alinhamento: 3, tipo: TipoDadoEnum.Texto),
-                CreateColumn(nome: "AnoMes", campo: "AnoMes", texto: "Ano/Mês", alinhamento: 1, tipo: TipoDadoEnum.MesAno),
-                CreateColumn(nome: "CNPJ", campo: "CNPJ", texto: "CNPJ", alinhamento: 1, tipo: TipoDadoEnum.CNPJ, Link: "ShowCNPJ", LinkFields: new List<string> { "CNPJ" }),
-                CreateColumn(nome: "antecipComEncDeclaracao", campo: "antecipComEncDeclaracao", texto: "Antecip com Enc.", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "antecipSemEncDeclaracao", campo: "antecipSemEncDeclaracao", texto: "Antecip sem Enc.", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "difalDeclaracao", campo: "difalDeclaracao", texto: "DIFAL", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "icmsStDeclaracao", campo: "icmsStDeclaracao", texto: "ICMS-ST", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "amparaStDeclaracao", campo: "amparaStDeclaracao", texto: "Ampara ST", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "totalDeclaracao", campo: "totalDeclaracao", texto: "Total", alinhamento: 2, tipo: TipoDadoEnum.Moeda),
-                CreateColumn(nome: "statusDescricao", campo: "statusDescricao", texto: "Status", alinhamento: 3, tipo: TipoDadoEnum.Texto),
+                CreateColumn(nome: "IE", campo: "IE", texto: "IE", alinhamento: 1, tipo: TipoDadoEnum.IE, textoToolTip: "Inscrição Estadual da empresa", Link: "ShowInfo", LinkFields: new List<string> { "IE", "Nome" }),
+                CreateColumn(nome: "Codigo", campo: "Codigo", texto: "Código", alinhamento: 2, tipo: TipoDadoEnum.Numero, textoToolTip: "Código único identificador da empresa"),
+                CreateColumn(nome: "Nome", campo: "Nome", texto: "Nome", alinhamento: 3, tipo: TipoDadoEnum.Texto, textoToolTip: "Nome fantasia ou razão social da empresa"),
+                CreateColumn(nome: "AnoMes", campo: "AnoMes", texto: "Ano/Mês", alinhamento: 1, tipo: TipoDadoEnum.MesAno, textoToolTip: "Ano e mês de referência dos dados"),
+                CreateColumn(nome: "CNPJ", campo: "CNPJ", texto: "CNPJ", alinhamento: 1, tipo: TipoDadoEnum.CNPJ, textoToolTip: "Cadastro Nacional da Pessoa Jurídica", Link: "ShowCNPJ", LinkFields: new List<string> { "CNPJ" }),
+                CreateColumn(nome: "antecipComEncDeclaracao", campo: "antecipComEncDeclaracao", texto: "Antecip com Enc.", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor de antecipação tributária com encargos na declaração"),
+                CreateColumn(nome: "antecipSemEncDeclaracao", campo: "antecipSemEncDeclaracao", texto: "Antecip sem Enc.", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor de antecipação tributária sem encargos na declaração"),
+                CreateColumn(nome: "difalDeclaracao", campo: "difalDeclaracao", texto: "DIFAL", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor do DIFAL (Diferencial de Alíquota) na declaração"),
+                CreateColumn(nome: "icmsStDeclaracao", campo: "icmsStDeclaracao", texto: "ICMS-ST", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor do ICMS-ST (Substituição Tributária) na declaração"),
+                CreateColumn(nome: "amparaStDeclaracao", campo: "amparaStDeclaracao", texto: "Ampara ST", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor do Amparo ST na declaração"),
+                CreateColumn(nome: "totalDeclaracao", campo: "totalDeclaracao", texto: "Total", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor total declarado"),
+                CreateColumn(nome: "statusDescricao", campo: "statusDescricao", texto: "Status", alinhamento: 3, tipo: TipoDadoEnum.Texto, textoToolTip: "Descrição do status da declaração (Declarado, Em Aberto, etc.)"),
             };
 
             ApplyColumnOrder(SelectedOrder == "IE" ? ColumnOrderIE : ColumnOrderCNPJ);
@@ -203,53 +203,4 @@ namespace RazorDataPresentation.Pages
             };
         }
     }
-
-    public class ColunaCustomizada
-    {
-        public string nome { get; set; } = string.Empty;
-        public string campo { get; set; } = string.Empty;
-        public string texto { get; set; } = string.Empty;
-        public int alinhamento { get; set; } = 3;
-        public TipoDadoEnum tipo { get; set; } = TipoDadoEnum.Texto;
-        public bool ativo { get; set; } = true;
-        public string textoToolTip { get; set; } = string.Empty;
-        public bool chaveadoOnOff { get; set; } = true;
-        public bool impresso { get; set; } = true;
-        public string? Link { get; set; } // Padrão: tipo de ação a executar
-        public List<string>? LinkFields { get; set; } // Campos da linha a usar no link
-    }
-
-    public enum TipoDadoEnum
-    {
-        Texto,
-        CNPJ,
-        IE,
-        Numero,
-        Moeda,
-        SimNao,
-        MesAno
-    }
-    
-    public class Empresa
-    {
-        public int Codigo { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string CNPJ { get; set; } = string.Empty;
-        public string IE { get; set; } = string.Empty;
-        public DateTime AnoMes { get; set; }
-        public decimal antecipComEncDeclaracao { get; set; }
-        public decimal antecipSemEncDeclaracao { get; set; }
-        public decimal difalDeclaracao { get; set; }
-        public decimal icmsStDeclaracao { get; set; }
-        public decimal amparaStDeclaracao { get; set; }
-        public decimal totalDeclaracao { get; set; }
-        public string statusDescricao { get; set; } = string.Empty;
-    }
-
-    public enum AlinhamentoEnum {
-      Centro = 1,
-      Direita = 2,
-      Esquerda = 3
-    }
-
 }

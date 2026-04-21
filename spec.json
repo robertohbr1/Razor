@@ -1,0 +1,156 @@
+{
+  "project": {
+    "name": "RazorDataPresentation",
+    "description": "ASP.NET Core Razor Pages application for data presentation with customizable table columns and company data.",
+    "framework": "ASP.NET Core",
+    "language": "C#",
+    "targetFrameworks": ["net8.0", "net9.0", "net10.0"]
+  },
+  "models": {
+    "Empresa": {
+      "description": "Represents a company entity with financial data.",
+      "properties": {
+        "Codigo": {
+          "type": "int",
+          "description": "Unique code for the company."
+        },
+        "Nome": {
+          "type": "string",
+          "description": "Name of the company."
+        },
+        "CNPJ": {
+          "type": "string",
+          "description": "Brazilian company registration number (CNPJ)."
+        },
+        "IE": {
+          "type": "string",
+          "description": "State tax registration number (Inscrição Estadual)."
+        },
+        "AnoMes": {
+          "type": "DateTime",
+          "description": "Year and month reference for the data."
+        },
+        "antecipComEncDeclaracao": {
+          "type": "decimal",
+          "description": "Anticipation with withholding declaration amount."
+        },
+        "antecipSemEncDeclaracao": {
+          "type": "decimal",
+          "description": "Anticipation without withholding declaration amount."
+        },
+        "difalDeclaracao": {
+          "type": "decimal",
+          "description": "DIFAL declaration amount."
+        },
+        "icmsStDeclaracao": {
+          "type": "decimal",
+          "description": "ICMS-ST declaration amount."
+        },
+        "amparaStDeclaracao": {
+          "type": "decimal",
+          "description": "Ampara ST declaration amount."
+        },
+        "totalDeclaracao": {
+          "type": "decimal",
+          "description": "Total declaration amount."
+        },
+        "statusDescricao": {
+          "type": "string",
+          "description": "Status description of the declaration."
+        }
+      }
+    },
+    "ColunaCustomizada": {
+      "description": "Represents a customizable table column configuration.",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Internal name of the column."
+        },
+        "campo": {
+          "type": "string",
+          "description": "Field name corresponding to the data property."
+        },
+        "texto": {
+          "type": "string",
+          "description": "Display text for the column header."
+        },
+        "alinhamento": {
+          "type": "int",
+          "description": "Alignment code (1: center, 2: right, 3: left)."
+        },
+        "tipo": {
+          "type": "TipoDadoEnum",
+          "description": "Data type enumeration for formatting."
+        },
+        "ativo": {
+          "type": "bool",
+          "description": "Whether the column is active/visible."
+        },
+        "textoToolTip": {
+          "type": "string",
+          "description": "Tooltip text for the column."
+        },
+        "chaveadoOnOff": {
+          "type": "bool",
+          "description": "Whether the column can be toggled on/off."
+        },
+        "impresso": {
+          "type": "bool",
+          "description": "Whether the column is included in print output."
+        },
+        "Link": {
+          "type": "string",
+          "description": "Link action type (e.g., 'ShowInfo', 'ShowCNPJ').",
+          "nullable": true
+        },
+        "LinkFields": {
+          "type": "List<string>",
+          "description": "List of fields to use in the link.",
+          "nullable": true
+        }
+      }
+    }
+  },
+  "enums": {
+    "TipoDadoEnum": {
+      "description": "Enumeration for data types used in column formatting.",
+      "values": [
+        "Texto",
+        "CNPJ",
+        "IE",
+        "Numero",
+        "Moeda",
+        "SimNao",
+        "MesAno"
+      ]
+    },
+    "AlinhamentoEnum": {
+      "description": "Enumeration for text alignment options.",
+      "values": {
+        "Centro": 1,
+        "Direita": 2,
+        "Esquerda": 3
+      }
+    }
+  },
+  "pages": {
+    "Index": {
+      "description": "Main page displaying company data in a customizable table.",
+      "route": "/",
+      "features": [
+        "Dynamic column ordering (IE or CNPJ based)",
+        "Data formatting based on TipoDadoEnum",
+        "Clickable links for IE and CNPJ fields",
+        "Alignment control per column"
+      ]
+    }
+  },
+  "formatting": {
+    "CNPJ": "XX.XXX.XXX/XXXX-XX",
+    "IE": "XXX/XXXXX",
+    "Numero": "Brazilian number format (N0)",
+    "Moeda": "Brazilian currency format (N2)",
+    "MesAno": "MM/yyyy"
+  }
+}

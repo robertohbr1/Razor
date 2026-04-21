@@ -1,0 +1,19 @@
+/* Test Runner Configuration */
+
+{
+  "xunit": {
+    "diagnosticMessages": true,
+    "methodDisplay": "method",
+    "methodDisplayOptions": "all",
+    "parallelizeAssembly": true,
+    "parallelizeTestCollections": true,
+    "maxParallelThreads": 4
+  },
+  "testRunnerConfig": {
+    "enableCodeCoverage": true,
+    "coverageThreshold": 70,
+    "includeAssembly": "RazorDataPresentation",
+    "reportFormats": ["opencover", "json", "lcov"],
+    "excludedFiles": ["bin/**", "obj/**", "*.g.cs"]
+  }
+}
