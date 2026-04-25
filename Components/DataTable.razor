@@ -1,0 +1,78 @@
+@using RazorDataPresentation
+@typeparam TItem
+
+<table id="data-table">
+    <thead>
+        <tr>
+            @foreach (var column in Columns.Where(c => c.ativo))
+            {
+                <th data-col="@column.nome" style="text-align:@GetAlignmentCss(column.alinhamento)" title="@column.textoToolTip">@column.texto</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Data)
+        {
+            <tr>
+                @foreach (var column in Columns.Where(c => c.ativo))
+                {
+                    var value = item?.GetType().GetProperty(column.nome)?.GetValue(item);
+                    var formattedValue = FormatValue(value, column.tipo);
+                    
+                    <td data-col="@column.nome" style="text-align:@GetAlignmentCss(column.alinhamento)">
+                        @if (!string.IsNullOrEmpty(column.Link))
+                        {
+                            var linkData = GetLinkData(item, column.LinkFields);
+                            <a href="#" onclick="handleLinkAction('@column.Link', '@linkData'); return false;" style="cursor: pointer; color: blue; text-decoration: underline;">
+                                @formattedValue
+                            </a>
+                        }
+                        else
+                        {
+                            @formattedValue
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<ColunaCustomizada> Columns { get; set; } = new();
+
+    [Parameter]
+    public List<TItem> Data { get; set; } = new();
+
+    [Parameter]
+    public Func<int, string> GetAlignmentCss { get; set; } = (alinhamento) =>
+    {
+        return alinhamento switch
+        {
+            1 => "center",
+            2 => "right",
+            3 => "left",
+            _ => "left"
+        };
+    };
+
+    [Parameter]
+    public Func<object?, TipoDadoEnum, string> FormatValue { get; set; } = (value, tipoInfo) => value?.ToString() ?? string.Empty;
+
+    [Parameter]
+    public Func<TItem, List<string>?, string> GetLinkData { get; set; } = (item, linkFields) =>
+    {
+        if (linkFields == null || linkFields.Count == 0)
+            return string.Empty;
+
+        var values = new List<string>();
+        foreach (var field in linkFields)
+        {
+            var val = item?.GetType().GetProperty(field)?.GetValue(item);
+            values.Add(val?.ToString() ?? string.Empty);
+        }
+
+        return string.Join("|", values);
+    };
+}

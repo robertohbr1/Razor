@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Globalization;
+using RazorDataPresentation.Components;
+using static RazorDataPresentation.Components.ColunaCustomizada;
 
 namespace RazorDataPresentation.Pages
 {
@@ -7,28 +8,12 @@ namespace RazorDataPresentation.Pages
     {
         public List<ColunaCustomizada> TableColumns { get; set; } = new();
         public List<Empresa> Empresas { get; set; } = new();
+        public List<ColunaCustomizada> ColunasNotasFiscais { get; set; } = new();
+        public List<NotaFiscal> NotasFiscais { get; set; } = new();
         public string SelectedOrder { get; set; } = "IE";
 
         private readonly List<string> ColumnOrderIE = new() { "IE", "Nome", "AnoMes", "CNPJ", "antecipComEncDeclaracao", "antecipSemEncDeclaracao", "difalDeclaracao", "icmsStDeclaracao", "amparaStDeclaracao", "totalDeclaracao", "statusDescricao" };
         private readonly List<string> ColumnOrderCNPJ = new() { "CNPJ", "IE", "Codigo", "Nome", "AnoMes", "antecipSemEncDeclaracao", "difalDeclaracao", "icmsStDeclaracao", "amparaStDeclaracao", "totalDeclaracao", "statusDescricao" };
-
-        private ColunaCustomizada CreateColumn(string nome, string campo, string texto, int alinhamento, TipoDadoEnum tipo, bool ativo = true, string textoToolTip = "", bool chaveadoOnOff = true, bool impresso = true, string? Link = null, List<string>? LinkFields = null)
-        {
-            return new ColunaCustomizada
-            {
-                nome = nome,
-                campo = campo,
-                texto = texto,
-                alinhamento = alinhamento,
-                tipo = tipo,
-                ativo = ativo,
-                textoToolTip = textoToolTip,
-                chaveadoOnOff = chaveadoOnOff,
-                impresso = impresso,
-                Link = Link,
-                LinkFields = LinkFields
-            };
-        }
 
         public void OnGet(string order = "IE")
         {
@@ -75,6 +60,44 @@ namespace RazorDataPresentation.Pages
                 new Empresa { Codigo = 19, Nome = "Mídia Sigma Ltda.", CNPJ = "90909909000111", IE = "909909001", AnoMes = new DateTime(2024, 7, 1), antecipComEncDeclaracao = 129500.45m, antecipSemEncDeclaracao = 22015.08m, difalDeclaracao = 4665.02m, icmsStDeclaracao = 2590.01m, amparaStDeclaracao = 0.00m, totalDeclaracao = 0.00m, statusDescricao = "Em Aberto" },
                 new Empresa { Codigo = 20, Nome = "Design Tau ME", CNPJ = "21212212000122", IE = "212212112", AnoMes = new DateTime(2024, 8, 1), antecipComEncDeclaracao = 74500.00m, antecipSemEncDeclaracao = 12665.00m, difalDeclaracao = 2685.00m, icmsStDeclaracao = 1490.00m, amparaStDeclaracao = 0.00m, totalDeclaracao = 0.00m, statusDescricao = "Em Aberto" },
             };
+
+            ColunasNotasFiscais = new List<ColunaCustomizada>
+            {
+                CreateColumn(nome: "Numero", campo: "Numero", texto: "Número", alinhamento: 2, tipo: TipoDadoEnum.Numero, textoToolTip: "Número da NF"),
+                CreateColumn(nome: "Serie", campo: "Serie", texto: "Série", alinhamento: 1, tipo: TipoDadoEnum.Texto, textoToolTip: "Série da NF"),
+                CreateColumn(nome: "DataEmissao", campo: "DataEmissao", texto: "Data de Emissão", alinhamento: 1, tipo: TipoDadoEnum.Texto, textoToolTip: "Data em que a nota foi emitida"),
+                CreateColumn(nome: "CNPJEmitente", campo: "CNPJEmitente", texto: "CNPJ Emitente", alinhamento: 1, tipo: TipoDadoEnum.CNPJ, textoToolTip: "CNPJ do emitente da NF"),
+                CreateColumn(nome: "NomeEmitente", campo: "NomeEmitente", texto: "Nome Emitente", alinhamento: 3, tipo: TipoDadoEnum.Texto, textoToolTip: "Nome do emitente"),
+                CreateColumn(nome: "ValorTotal", campo: "ValorTotal", texto: "Valor Total", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor total da NF"),
+                CreateColumn(nome: "ValorICMS", campo: "ValorICMS", texto: "Valor ICMS", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor do ICMS da NF"),
+                CreateColumn(nome: "ValorIPI", campo: "ValorIPI", texto: "Valor IPI", alinhamento: 2, tipo: TipoDadoEnum.Moeda, textoToolTip: "Valor do IPI da NF"),
+                CreateColumn(nome: "ChaveAcesso", campo: "ChaveAcesso", texto: "Chave de Acesso", alinhamento: 1, tipo: TipoDadoEnum.Texto, textoToolTip: "Chave de acesso de 44 dígitos"),
+                CreateColumn(nome: "Status", campo: "Status", texto: "Status", alinhamento: 3, tipo: TipoDadoEnum.Texto, textoToolTip: "Status atual da NF (Autorizada, Cancelada)")
+            };
+
+            NotasFiscais = new List<NotaFiscal>
+            {
+                new NotaFiscal { Numero = 1001, Serie = "1", DataEmissao = new DateTime(2023, 1, 10), CNPJEmitente = "12345678000190", NomeEmitente = "A Empresa Exemplo Ltda.", ValorTotal = 1500.00m, ValorICMS = 270.00m, ValorIPI = 75.00m, ChaveAcesso = "35230112345678000190550010000010011000000011", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1002, Serie = "1", DataEmissao = new DateTime(2023, 1, 11), CNPJEmitente = "12345678000190", NomeEmitente = "A Empresa Exemplo Ltda.", ValorTotal = 3200.50m, ValorICMS = 576.09m, ValorIPI = 160.02m, ChaveAcesso = "35230112345678000190550010000010021000000022", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1003, Serie = "1", DataEmissao = new DateTime(2023, 1, 12), CNPJEmitente = "98765432000110", NomeEmitente = "Serviços Alpha S.A.", ValorTotal = 450.00m, ValorICMS = 81.00m, ValorIPI = 22.50m, ChaveAcesso = "35230198765432000110550010000010031000000033", Status = "Cancelada" },
+                new NotaFiscal { Numero = 1004, Serie = "2", DataEmissao = new DateTime(2023, 2, 5), CNPJEmitente = "11222333000144", NomeEmitente = "Comércio Beta ME", ValorTotal = 8900.00m, ValorICMS = 1602.00m, ValorIPI = 445.00m, ChaveAcesso = "35230211222333000144550020000010041000000044", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1005, Serie = "2", DataEmissao = new DateTime(2023, 2, 18), CNPJEmitente = "11222333000144", NomeEmitente = "Comércio Beta ME", ValorTotal = 1250.75m, ValorICMS = 225.13m, ValorIPI = 62.53m, ChaveAcesso = "35230211222333000144550020000010051000000055", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1006, Serie = "1", DataEmissao = new DateTime(2023, 3, 1), CNPJEmitente = "55666777000188", NomeEmitente = "Logística Gama LTDA", ValorTotal = 5600.00m, ValorICMS = 1008.00m, ValorIPI = 280.00m, ChaveAcesso = "35230355666777000188550010000010061000000066", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1007, Serie = "1", DataEmissao = new DateTime(2023, 3, 15), CNPJEmitente = "55666777000188", NomeEmitente = "Logística Gama LTDA", ValorTotal = 7300.25m, ValorICMS = 1314.04m, ValorIPI = 365.01m, ChaveAcesso = "35230355666777000188550010000010071000000077", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1008, Serie = "3", DataEmissao = new DateTime(2023, 4, 10), CNPJEmitente = "22333444000155", NomeEmitente = "Tech Delta Tecnologia", ValorTotal = 12400.00m, ValorICMS = 2232.00m, ValorIPI = 620.00m, ChaveAcesso = "35230422333444000155550030000010081000000088", Status = "Cancelada" },
+                new NotaFiscal { Numero = 1009, Serie = "3", DataEmissao = new DateTime(2023, 4, 22), CNPJEmitente = "22333444000155", NomeEmitente = "Tech Delta Tecnologia", ValorTotal = 890.00m, ValorICMS = 160.20m, ValorIPI = 44.50m, ChaveAcesso = "35230422333444000155550030000010091000000099", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1010, Serie = "1", DataEmissao = new DateTime(2023, 5, 5), CNPJEmitente = "33444555000166", NomeEmitente = "Financeira Épsilon SA", ValorTotal = 2100.50m, ValorICMS = 378.09m, ValorIPI = 105.02m, ChaveAcesso = "35230533444555000166550010000010101000000101", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1011, Serie = "1", DataEmissao = new DateTime(2023, 5, 12), CNPJEmitente = "33444555000166", NomeEmitente = "Financeira Épsilon SA", ValorTotal = 3450.00m, ValorICMS = 621.00m, ValorIPI = 172.50m, ChaveAcesso = "35230533444555000166550010000010111000000112", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1012, Serie = "2", DataEmissao = new DateTime(2023, 6, 8), CNPJEmitente = "44555666000177", NomeEmitente = "Construções Zeta Ltda.", ValorTotal = 15800.00m, ValorICMS = 2844.00m, ValorIPI = 790.00m, ChaveAcesso = "35230644555666000177550020000010121000000123", Status = "Cancelada" },
+                new NotaFiscal { Numero = 1013, Serie = "2", DataEmissao = new DateTime(2023, 6, 20), CNPJEmitente = "44555666000177", NomeEmitente = "Construções Zeta Ltda.", ValorTotal = 4300.75m, ValorICMS = 774.13m, ValorIPI = 215.03m, ChaveAcesso = "35230644555666000177550020000010131000000134", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1014, Serie = "1", DataEmissao = new DateTime(2023, 7, 2), CNPJEmitente = "66777888000199", NomeEmitente = "Transporte Eta ME", ValorTotal = 950.00m, ValorICMS = 171.00m, ValorIPI = 47.50m, ChaveAcesso = "35230766777888000199550010000010141000000145", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1015, Serie = "1", DataEmissao = new DateTime(2023, 7, 18), CNPJEmitente = "66777888000199", NomeEmitente = "Transporte Eta ME", ValorTotal = 2780.00m, ValorICMS = 500.40m, ValorIPI = 139.00m, ChaveAcesso = "35230766777888000199550010000010151000000156", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1016, Serie = "4", DataEmissao = new DateTime(2023, 8, 11), CNPJEmitente = "77888999000111", NomeEmitente = "Consultoria Theta S.A.", ValorTotal = 11200.50m, ValorICMS = 2016.09m, ValorIPI = 560.02m, ChaveAcesso = "35230877888999000111550040000010161000000167", Status = "Cancelada" },
+                new NotaFiscal { Numero = 1017, Serie = "4", DataEmissao = new DateTime(2023, 8, 25), CNPJEmitente = "77888999000111", NomeEmitente = "Consultoria Theta S.A.", ValorTotal = 6400.00m, ValorICMS = 1152.00m, ValorIPI = 320.00m, ChaveAcesso = "35230877888999000111550040000010171000000178", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1018, Serie = "1", DataEmissao = new DateTime(2023, 9, 3), CNPJEmitente = "88999000000122", NomeEmitente = "Educação Iota Ltda.", ValorTotal = 850.25m, ValorICMS = 153.04m, ValorIPI = 42.51m, ChaveAcesso = "35230988999000000122550010000010181000000189", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1019, Serie = "1", DataEmissao = new DateTime(2023, 9, 14), CNPJEmitente = "88999000000122", NomeEmitente = "Educação Iota Ltda.", ValorTotal = 1900.00m, ValorICMS = 342.00m, ValorIPI = 95.00m, ChaveAcesso = "35230988999000000122550010000010191000000190", Status = "Autorizada" },
+                new NotaFiscal { Numero = 1020, Serie = "2", DataEmissao = new DateTime(2023, 10, 1), CNPJEmitente = "10101101000133", NomeEmitente = "Saúde Kappa Clínica", ValorTotal = 23000.00m, ValorICMS = 4140.00m, ValorIPI = 1150.00m, ChaveAcesso = "35231010101101000133550020000010201000000201", Status = "Cancelada" },
+            };
         }
 
         private void ApplyColumnOrder(List<string> columnOrder)
@@ -100,106 +123,21 @@ namespace RazorDataPresentation.Pages
             TableColumns = ordered;
         }
 
-        public string FormatValue(object? value, TipoDadoEnum tipoInfo)
+        public DataTableComponentParams GetDataTableParams()
         {
-            if (value == null)
+            return new DataTableComponentParams
             {
-                return string.Empty;
-            }
-
-            return tipoInfo switch
-            {
-                TipoDadoEnum.Texto => value.ToString() ?? string.Empty,
-                TipoDadoEnum.CNPJ => FormatCnpj(value),
-                TipoDadoEnum.IE => FormatIe(value),
-                TipoDadoEnum.Numero => FormatNumero(value),
-                TipoDadoEnum.Moeda => FormatMoeda(value),
-                TipoDadoEnum.SimNao => FormatSimNao(value),
-                TipoDadoEnum.MesAno => FormatMesAno(value),
-                _ => value.ToString() ?? string.Empty,
+                Columns = TableColumns,
+                Data = Empresas.Cast<object>().ToList()
             };
         }
 
-        public string GetLinkData(Empresa empresa, List<string>? linkFields)
+        public DataTableComponentParams GetNotasFiscaisDataTableParams()
         {
-            if (linkFields == null || linkFields.Count == 0)
-                return string.Empty;
-
-            var values = new List<string>();
-            foreach (var field in linkFields)
+            return new DataTableComponentParams
             {
-                var value = empresa.GetType().GetProperty(field)?.GetValue(empresa);
-                values.Add(value?.ToString() ?? string.Empty);
-            }
-
-            return string.Join("|", values);
-        }
-
-        private static string FormatCnpj(object value)
-        {
-            var digits = new string((value.ToString() ?? string.Empty).Where(char.IsDigit).ToArray());
-            if (digits.Length != 14)
-            {
-                return value.ToString() ?? string.Empty;
-            }
-
-            return string.Format("{0}.{1}.{2}/{3}-{4}",
-                digits.Substring(0, 2),
-                digits.Substring(2, 3),
-                digits.Substring(5, 3),
-                digits.Substring(8, 4),
-                digits.Substring(12, 2));
-        }
-
-        private static string FormatIe(object value)
-        {
-            var raw = new string((value.ToString() ?? string.Empty).Where(char.IsLetterOrDigit).ToArray());
-            if (raw.Length <= 3)
-            {
-                return raw;
-            }
-
-            return raw.Substring(0, 3) + "/" + raw.Substring(3);
-        }
-
-        private static string FormatNumero(object value)
-        {
-            return decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var number)
-                ? number.ToString("N0", CultureInfo.GetCultureInfo("pt-BR"))
-                : value.ToString() ?? string.Empty;
-        }
-
-        private static string FormatMoeda(object value)
-        {
-            return decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var number)
-                ? number.ToString("N2", CultureInfo.GetCultureInfo("pt-BR"))
-                : value.ToString() ?? string.Empty;
-        }
-
-        private static string FormatSimNao(object value)
-        {
-            return bool.TryParse(value.ToString(), out var boolValue)
-                ? (boolValue ? "Sim" : "Não")
-                : value.ToString() ?? string.Empty;
-        }
-
-        private static string FormatMesAno(object value)
-        {
-            if (DateTime.TryParse(value.ToString(), out var date))
-            {
-                return date.ToString("MM/yyyy");
-            }
-            return value.ToString() ?? string.Empty;
-        }
-
-        public string GetAlignmentCss(int alinhamento)
-        {
-            return alinhamento switch
-            {
-                1 => "center",
-                2 => "right",
-                3 => "left",
-                _ => "left" // default to left
+                Columns = ColunasNotasFiscais,
+                Data = NotasFiscais.Cast<object>().ToList()
             };
         }
     }

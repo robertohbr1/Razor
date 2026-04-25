@@ -1,6 +1,6 @@
 using Xunit;
 using RazorDataPresentation.Pages;
-using System.Globalization;
+using RazorDataPresentation.Components;
 
 namespace RazorDataPresentation.Tests;
 
@@ -23,7 +23,7 @@ public class IndexModelTests
     public void FormatValue_WithValidCNPJ_ReturnsFormattedCNPJ(string cnpj, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(cnpj, TipoDadoEnum.CNPJ);
+        var result = DataTableFormatter.FormatValue(cnpj, TipoDadoEnum.CNPJ);
 
         // Assert
         Assert.Equal(expected, result);
@@ -36,7 +36,7 @@ public class IndexModelTests
     public void FormatValue_WithInvalidCNPJ_ReturnsOriginalValue(string cnpj)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(cnpj, TipoDadoEnum.CNPJ);
+        var result = DataTableFormatter.FormatValue(cnpj, TipoDadoEnum.CNPJ);
 
         // Assert
         Assert.Equal(cnpj, result);
@@ -46,7 +46,7 @@ public class IndexModelTests
     public void FormatValue_WithNullCNPJ_ReturnsEmpty()
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(null, TipoDadoEnum.CNPJ);
+        var result = DataTableFormatter.FormatValue(null, TipoDadoEnum.CNPJ);
 
         // Assert
         Assert.Empty(result);
@@ -61,7 +61,7 @@ public class IndexModelTests
     public void FormatValue_WithValidIE_ReturnsFormattedIE(string ie, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(ie, TipoDadoEnum.IE);
+        var result = DataTableFormatter.FormatValue(ie, TipoDadoEnum.IE);
 
         // Assert
         Assert.Equal(expected, result);
@@ -73,7 +73,7 @@ public class IndexModelTests
     public void FormatValue_WithShortIE_ReturnsOriginalValue(string ie)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(ie, TipoDadoEnum.IE);
+        var result = DataTableFormatter.FormatValue(ie, TipoDadoEnum.IE);
 
         // Assert
         Assert.Equal(ie, result);
@@ -83,7 +83,7 @@ public class IndexModelTests
     public void FormatValue_WithNullIE_ReturnsEmpty()
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(null, TipoDadoEnum.IE);
+        var result = DataTableFormatter.FormatValue(null, TipoDadoEnum.IE);
 
         // Assert
         Assert.Empty(result);
@@ -98,7 +98,7 @@ public class IndexModelTests
     public void FormatValue_WithValidNumber_ReturnsFormattedNumber(string number, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(number, TipoDadoEnum.Numero);
+        var result = DataTableFormatter.FormatValue(number, TipoDadoEnum.Numero);
 
         // Assert
         Assert.Equal(expected, result);
@@ -111,7 +111,7 @@ public class IndexModelTests
     public void FormatValue_WithIntegerNumber_ReturnsFormattedNumber(int number)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(number, TipoDadoEnum.Numero);
+        var result = DataTableFormatter.FormatValue(number, TipoDadoEnum.Numero);
 
         // Assert
         Assert.NotEmpty(result);
@@ -122,7 +122,7 @@ public class IndexModelTests
     public void FormatValue_WithNullNumber_ReturnsEmpty()
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(null, TipoDadoEnum.Numero);
+        var result = DataTableFormatter.FormatValue(null, TipoDadoEnum.Numero);
 
         // Assert
         Assert.Empty(result);
@@ -137,7 +137,7 @@ public class IndexModelTests
     public void FormatValue_WithValidCurrency_ReturnsFormattedCurrency(string value, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(value, TipoDadoEnum.Moeda);
+        var result = DataTableFormatter.FormatValue(value, TipoDadoEnum.Moeda);
 
         // Assert
         Assert.Equal(expected, result);
@@ -149,7 +149,7 @@ public class IndexModelTests
     public void FormatValue_WithDecimalCurrency_ReturnsFormattedCurrency(decimal value)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(value, TipoDadoEnum.Moeda);
+        var result = DataTableFormatter.FormatValue(value, TipoDadoEnum.Moeda);
 
         // Assert
         Assert.NotEmpty(result);
@@ -160,7 +160,7 @@ public class IndexModelTests
     public void FormatValue_WithNullCurrency_ReturnsEmpty()
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(null, TipoDadoEnum.Moeda);
+        var result = DataTableFormatter.FormatValue(null, TipoDadoEnum.Moeda);
 
         // Assert
         Assert.Empty(result);
@@ -176,7 +176,7 @@ public class IndexModelTests
     public void FormatValue_WithValidBooleanString_ReturnsSimNao(string value, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(value, TipoDadoEnum.SimNao);
+        var result = DataTableFormatter.FormatValue(value, TipoDadoEnum.SimNao);
 
         // Assert
         Assert.Equal(expected, result);
@@ -188,7 +188,7 @@ public class IndexModelTests
     public void FormatValue_WithInvalidBoolean_ReturnsOriginalValue(string value)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(value, TipoDadoEnum.SimNao);
+        var result = DataTableFormatter.FormatValue(value, TipoDadoEnum.SimNao);
 
         // Assert
         Assert.Equal(value, result);
@@ -202,7 +202,7 @@ public class IndexModelTests
     public void FormatValue_WithValidDate_ReturnsFormattedMesAno(string dateString, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(dateString, TipoDadoEnum.MesAno);
+        var result = DataTableFormatter.FormatValue(dateString, TipoDadoEnum.MesAno);
 
         // Assert
         Assert.Equal(expected, result);
@@ -215,7 +215,7 @@ public class IndexModelTests
         var date = new DateTime(2023, 5, 15);
 
         // Act
-        var result = _indexModel.FormatValue(date, TipoDadoEnum.MesAno);
+        var result = DataTableFormatter.FormatValue(date, TipoDadoEnum.MesAno);
 
         // Assert
         Assert.Equal("05/2023", result);
@@ -227,7 +227,7 @@ public class IndexModelTests
     public void FormatValue_WithInvalidDate_ReturnsOriginalValue(string dateString)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(dateString, TipoDadoEnum.MesAno);
+        var result = DataTableFormatter.FormatValue(dateString, TipoDadoEnum.MesAno);
 
         // Assert
         Assert.Equal(dateString, result);
@@ -242,7 +242,7 @@ public class IndexModelTests
     public void FormatValue_WithTexto_ReturnsOriginalValue(string texto, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.FormatValue(texto, TipoDadoEnum.Texto);
+        var result = DataTableFormatter.FormatValue(texto, TipoDadoEnum.Texto);
 
         // Assert
         Assert.Equal(expected, result);
@@ -262,7 +262,7 @@ public class IndexModelTests
     public void GetAlignmentCss_WithValidAlinhamento_ReturnsCorrectCss(int alinhamento, string expected)
     {
         // Arrange & Act
-        var result = _indexModel.GetAlignmentCss(alinhamento);
+        var result = DataTableFormatter.GetAlignmentCss(alinhamento);
 
         // Assert
         Assert.Equal(expected, result);
@@ -285,7 +285,7 @@ public class IndexModelTests
         var linkFields = new List<string> { "IE", "Nome" };
 
         // Act
-        var result = _indexModel.GetLinkData(empresa, linkFields);
+        var result = DataTableFormatter.GetLinkData(empresa, linkFields);
 
         // Assert
         Assert.Equal("123456789|Empresa Teste", result);
@@ -299,7 +299,7 @@ public class IndexModelTests
         var linkFields = new List<string> { "CNPJ" };
 
         // Act
-        var result = _indexModel.GetLinkData(empresa, linkFields);
+        var result = DataTableFormatter.GetLinkData(empresa, linkFields);
 
         // Assert
         Assert.Equal("12345678000190", result);
@@ -312,7 +312,7 @@ public class IndexModelTests
         var empresa = new Empresa();
 
         // Act
-        var result = _indexModel.GetLinkData(empresa, null);
+        var result = DataTableFormatter.GetLinkData(empresa, null);
 
         // Assert
         Assert.Empty(result);
@@ -326,7 +326,7 @@ public class IndexModelTests
         var linkFields = new List<string>();
 
         // Act
-        var result = _indexModel.GetLinkData(empresa, linkFields);
+        var result = DataTableFormatter.GetLinkData(empresa, linkFields);
 
         // Assert
         Assert.Empty(result);

@@ -1,0 +1,38 @@
+@model RazorDataPresentation.Components.DataTableComponentParams
+
+<table id="data-table">
+    <thead>
+        <tr>
+            @foreach (var column in Model.Columns.Where(c => c.ativo))
+            {
+                <th data-col="@column.nome" style="text-align:@Model.GetAlignmentCss(column.alinhamento)" title="@column.textoToolTip">@column.texto</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                @foreach (var column in Model.Columns.Where(c => c.ativo))
+                {
+                    var value = item?.GetType().GetProperty(column.nome)?.GetValue(item);
+                    var formattedValue = Model.FormatValue(value, column.tipo);
+                    
+                    <td data-col="@column.nome" style="text-align:@Model.GetAlignmentCss(column.alinhamento)">
+                        @if (!string.IsNullOrEmpty(column.Link))
+                        {
+                            var linkData = Model.GetLinkData(item, column.LinkFields);
+                            <a href="#" onclick="handleLinkAction('@column.Link', '@linkData'); return false;" style="cursor: pointer; color: blue; text-decoration: underline;">
+                                @formattedValue
+                            </a>
+                        }
+                        else
+                        {
+                            @formattedValue
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

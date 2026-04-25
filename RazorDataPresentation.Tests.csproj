@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="RazorDataPresentation.csproj" />
   </ItemGroup>
 
